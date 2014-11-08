@@ -19,7 +19,10 @@ sbit GLCD_RST_Direction at TRISb5_bit;
 sbit Mmc_Chip_Select           at LATC0_bit;  // for writing to output pin always use latch (PIC18 family)
 sbit Mmc_Chip_Select_Direction at TRISC0_bit;
 /*************************************************************************/
+
 /********************** Methode Declaration Part ************************/
+
+/*******************  Signal Acquiring and Conversion *********************/
 void adc_acc(unsigned int *ana_res,unsigned int ch_n)
 {
   unsigned int i;
@@ -29,6 +32,8 @@ void adc_acc(unsigned int *ana_res,unsigned int ch_n)
  }
 }
 //////////////////////////////////////////////////////////////
+
+/*******************  Step Calculating *********************/
 float y_step(unsigned int tp_y,unsigned int bp_y)
 {
   float step;
@@ -36,6 +41,7 @@ float y_step(unsigned int tp_y,unsigned int bp_y)
   return step;
 }
 /////////////////////////////////////////////////////////////
+
 void res_acc(unsigned int *cal_res,unsigned int *ana_res,float step)
 {
   unsigned int i;
@@ -45,6 +51,7 @@ void res_acc(unsigned int *cal_res,unsigned int *ana_res,float step)
  }
 }
 /////////////////////////////////////////////////////////////
+
 /*******************  Writing to SD Card *********************/
 unsigned int mem_data_wr (unsigned int *ana_res)
 {
@@ -82,7 +89,7 @@ unsigned int mem_data_wr (unsigned int *ana_res)
    return re;
 }
 ////////////////////////////////////////////////////////////
-/*******************  reading from SD Card *********************/
+/*******************  Reading from SD Card *********************/
 void mem_data_re (unsigned int *mmc_res)
 {
   unsigned long mmc_size,cur_pos;
@@ -113,6 +120,7 @@ void mem_data_re (unsigned int *mmc_res)
   }
 }
 ///////////////////////////////////////////////////////////
+/*******************  Interpolation Method *********************/
   void interpo (unsigned int past_i, unsigned int pres_i, unsigned int past_y,unsigned int pres_y)
   {
       unsigned int med, r_past_y , r_pres_y ,r_past_i, r_pres_i;
@@ -127,9 +135,9 @@ void mem_data_re (unsigned int *mmc_res)
           r_pres_i = past_i;
           r_past_y = pres_y;
           r_pres_y = past_y;
-  /*** On inverse les variables pour avoir des resultats correct***/
+  
         }
-        else   // Sinon on fait l'affectation direct
+        else   
         {
          r_past_i = past_i;
          r_pres_i = pres_i;
@@ -142,7 +150,7 @@ void mem_data_re (unsigned int *mmc_res)
       }
       else
           {
-          // Sinon au lieu de dessiner des lignes entre les points on dessign les points
+          
       Glcd_Dot(pres_i, pres_y, 1);
       }
   } 
